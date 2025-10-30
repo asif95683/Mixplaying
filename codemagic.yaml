@@ -4,13 +4,35 @@ workflows:
     max_build_duration: 60
     environment:
       java: 17
+      android_signing: []
     scripts:
       - name: Prepare Dependencies
         script: |
-          chmod +x gradlew
+          chmod +x ./gradlew
           ./gradlew dependencies
       - name: Build Debug APK
         script: |
           ./gradlew assembleDebug
+    artifacts:
+      - app/build/outputs/**/*.apk
+
+  android-release:
+    name: MixPlaying Release Build
+    max_build_duration: 60
+    environment:
+      java: 17
+      android_signing:
+        - keystore: $KEYSTORE_PATH
+          keystore_password: $KEYSTORE_PASSWORD
+          key_alias: $KEY_ALIAS
+          key_password: $KEY_PASSWORD
+    scripts:
+      - name: Prepare Dependencies
+        script: |
+          chmod +x ./gradlew
+          ./gradlew dependencies
+      - name: Build Release APK
+        script: |
+          ./gradlew assembleRelease
     artifacts:
       - app/build/outputs/**/*.apk
