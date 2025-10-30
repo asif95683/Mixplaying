@@ -4,7 +4,6 @@ workflows:
     max_build_duration: 60
     environment:
       java: 17
-      android_signing: none
     scripts:
       - name: Prepare Dependencies
         script: |
