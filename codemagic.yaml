@@ -1,16 +1,25 @@
 workflows:
-  android-debug:
-    name: MixPlaying Debug Build
+  android-release:
+    name: MixPlaying Release Build
     max_build_duration: 60
     environment:
       java: 17
+      android_signing:
+        - keystore_reference: your_keystore_reference
     scripts:
-      - name: Prepare Dependencies
+      - name: Prepare Gradle Wrapper
         script: |
-          chmod +x gradlew
-          ./gradlew dependencies
-      - name: Build Debug APK
+          cd $CM_BUILD_DIR
+          chmod +x ./gradlew
+      - name: Clean Project
         script: |
-          ./gradlew assembleDebug
+          ./gradlew clean
+      - name: Build Signed APK
+        script: |
+          ./gradlew assembleRelease
     artifacts:
       - app/build/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - your_email@example.com
